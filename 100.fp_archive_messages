@@ -14,9 +14,9 @@ then
 fi
 
 case "$fp_archive_messages_enable" in
-    [Yy][Ee][Ss])
+	[Yy][Ee][Ss])
         echo ""
-	    echo "FreshPorts - archiving messages:"
+	echo "FreshPorts - archiving messages:"
         echo "cd $fp_scripts_dir && ./archive-messages.sh 1" | nice -n 5 su -fm $fp_freshports_user || rc=3
     *)  rc=0;;
 esac
