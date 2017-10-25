@@ -1,0 +1,25 @@
+#!/bin/sh -
+#
+# FreshPorts periodic script
+#
+# Populates the page_load_summary table
+#
+
+# If there is a global system configuration file, suck it in.
+#
+if [ -r /etc/defaults/periodic.conf ]
+then
+    . /etc/defaults/periodic.conf
+    source_periodic_confs
+fi
+
+case "$fp_daily_rendering_times_enable" in
+	[Yy][Ee][Ss])
+	logger into fp_daily_rendering_times
+        echo "cd $fp_scripts_dir && ./daily_rendering_times.sh" | su -fm $fp_freshports_user || rc=3
+	;;
+
+    *)  rc=0;;
+esac
+
+exit $rc
