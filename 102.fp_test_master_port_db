@@ -1,0 +1,25 @@
+!/bin/sh -
+#
+# FreshPorts periodic script
+#
+# Verifies that the FreshPorts database has sysutils/bacula-server as the
+# master port for bacula-client
+#
+
+# If there is a global system configuration file, suck it in.
+#
+if [ -r /etc/defaults/periodic.conf ]
+then
+    . /etc/defaults/periodic.conf
+    source_periodic_confs
+fi
+
+case "$fp_test_master_port_db_enable" in
+    [Yy][Ee][Ss])
+        echo ""
+	    echo "FreshPorts - testing master port via make:"
+        echo "cd $fp_scripts_dir && /usr/local/bin/perl test-master-port.pl" | su -fm $fp_freshports_user || rc=3
+    *)  rc=0;;
+esac
+
+exit $rc
