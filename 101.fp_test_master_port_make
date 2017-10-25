@@ -1,4 +1,4 @@
-!/bin/sh -
+#!/bin/sh -
 #
 # FreshPorts periodic script
 #
@@ -15,11 +15,13 @@ then
 fi
 
 case "$fp_test_master_port_make_enable" in
-    [Yy][Ee][Ss])
-        echo ""
-	    echo "FreshPorts - testing master port via make:"
+	[Yy][Ee][Ss])
         echo "cd $fp_scripts_dir && ./test-master-port.sh" | su -fm $fp_freshports_user || rc=3
-    *)  rc=0;;
+	;;
+
+	*)
+	rc=0
+	;;
 esac
 
 exit $rc
