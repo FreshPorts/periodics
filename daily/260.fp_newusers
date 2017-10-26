@@ -1,0 +1,25 @@
+#!/bin/sh -
+#
+# FreshPorts periodic script
+#
+# Any new users?
+#
+
+# If there is a global system configuration file, suck it in.
+#
+if [ -r /etc/defaults/periodic.conf ]
+then
+    . /etc/defaults/periodic.conf
+    source_periodic_confs
+fi
+
+case "$fp_newusers_enable" in
+	[Yy][Ee][Ss])
+	logger into fp_newusers
+        echo "cd $fp_scripts_dir && ./newusers.sh  2>&1 | mail -s 'FreshPorts users'     dan@langille.org" | su -fm $fp_freshports_user || rc=3
+	;;
+
+    *)  rc=0;;
+esac
+
+exit $rc
