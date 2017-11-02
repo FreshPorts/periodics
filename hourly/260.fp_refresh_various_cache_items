@@ -1,0 +1,24 @@
+#!/bin/sh -
+#
+# FreshPorts periodic script
+#
+# Checks for any ports which are missing a CATEGORY
+#
+# refreshes various otherwise-static files
+#
+if [ -r /etc/defaults/periodic.conf ]
+then
+    . /etc/defaults/periodic.conf
+    source_periodic_confs
+fi
+
+case "$fp_refresh_various_cache_items_enable" in
+	[Yy][Ee][Ss])
+	logger into fp_refresh_various_cache_items
+        echo "cd $fp_scripts_dir && ./cache-refresh.sh" | su -fm $fp_freshports_user || rc=3
+	;;
+
+    *)  rc=0;;
+esac
+
+exit $rc
