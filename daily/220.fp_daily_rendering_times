@@ -16,7 +16,7 @@ fi
 case "$fp_daily_rendering_times_enable" in
 	[Yy][Ee][Ss])
 	logger into fp_daily_rendering_times
-        echo "cd $fp_scripts_dir && ./daily_rendering_times.sh" | su -fm $fp_freshports_user || rc=3
+        echo "cd $fp_scripts_dir && ./daily_rendering_times.sh 1" | su -fm $fp_freshports_user || rc=3
 	;;
 
     *)  rc=0;;
