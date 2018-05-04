@@ -9,17 +9,17 @@
 #
 if [ -r /etc/defaults/periodic.conf ]
 then
-    . /etc/defaults/periodic.conf
-    source_periodic_confs
+	. /etc/defaults/periodic.conf
+	source_periodic_confs
 fi
 
 case "$fp_ports_tree_file_count_enable" in
 	[Yy][Ee][Ss])
-	logger into fp_ports_tree_file_count
-        echo "cd $fp_scripts_dir && /usr/local/bin/perl ports_tree_file_count.pl" | su -fm $fp_freshports_user || rc=3
+	logger -t FreshPorts into 160.fp_ports_tree_file_count
+	echo "cd $fp_scripts_dir && /usr/local/bin/perl ports_tree_file_count.pl" | su -fm $fp_freshports_user || rc=3
 	;;
 
-    *)  rc=0;;
+	*)  rc=0;;
 esac
 
 exit $rc

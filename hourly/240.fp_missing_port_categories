@@ -4,22 +4,24 @@
 #
 # Checks for any ports which are missing a CATEGORY
 #
+#
+#
 
 # If there is a global system configuration file, suck it in.
 #
 if [ -r /etc/defaults/periodic.conf ]
 then
-    . /etc/defaults/periodic.conf
-    source_periodic_confs
+	. /etc/defaults/periodic.conf
+	source_periodic_confs
 fi
 
 case "$fp_missing_port_categories_enable" in
 	[Yy][Ee][Ss])
-	logger into fp_missing_port_categories
-        echo "cd $fp_scripts_dir && ./missing-port-categories.sh" | su -fm $fp_freshports_user || rc=3
+	logger -t FreshPorts into 240.fp_missing_port_categories
+	echo "cd $fp_scripts_dir && ./missing-port-categories.sh" | su -fm $fp_freshports_user || rc=3
 	;;
 
-    *)  rc=0;;
+	*)  rc=0;;
 esac
 
 exit $rc

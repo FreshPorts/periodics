@@ -4,22 +4,24 @@
 #
 # compiles hourly stats within the database & outputs summary to disk
 #
+#
+#
 
 # If there is a global system configuration file, suck it in.
 #
 if [ -r /etc/defaults/periodic.conf ]
 then
-    . /etc/defaults/periodic.conf
-    source_periodic_confs
+	. /etc/defaults/periodic.conf
+	source_periodic_confs
 fi
 
 case "$fp_stats_hourly_enable" in
 	[Yy][Ee][Ss])
-	logger into fp_stats_hourly
-        echo "cd $fp_scripts_dir && /usr/local/bin/perl hourly_stats.pl > /dev/null" | su -fm $fp_freshports_user || rc=3
+	logger -t FreshPorts into 180.fp_stats_hourly
+	echo "cd $fp_scripts_dir && /usr/local/bin/perl hourly_stats.pl > /dev/null" | su -fm $fp_freshports_user || rc=3
 	;;
 
-    *)  rc=0;;
+	*)  rc=0;;
 esac
 
 exit $rc

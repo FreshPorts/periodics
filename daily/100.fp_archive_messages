@@ -7,18 +7,18 @@
 
 # If there is a global system configuration file, suck it in.
 #
-logger "FreshPorts - archiving messages:"
+logger -t FreshPorts "FreshPorts - archiving messages:"
 if [ -r /etc/defaults/periodic.conf ]
 then
     . /etc/defaults/periodic.conf
     source_periodic_confs
 fi
 
-logger "FreshPorts - archiving messages:"
+logger -t FreshPorts "FreshPorts - archiving messages:"
 case "$fp_archive_messages_enable" in
 	[Yy][Ee][Ss])
         echo ""
-	logger "FreshPorts - archiving messages:"
+	logger -t FreshPorts "FreshPorts - archiving messages:"
         echo "cd $fp_scripts_dir && ./archive-messages.sh 1" | nice -n 5 su -fm $fp_freshports_user || rc=3
         ;;
         

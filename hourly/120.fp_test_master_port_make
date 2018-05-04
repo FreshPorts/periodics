@@ -5,23 +5,23 @@
 # Verifies that make -V MASTER_PORT on sysutils/bacula-client gives
 # sysutils/bacula-server when run on the FreshPorts ports-HEAD tree.
 #
+#
 
 # If there is a global system configuration file, suck it in.
 #
 if [ -r /etc/defaults/periodic.conf ]
 then
-    . /etc/defaults/periodic.conf
-    source_periodic_confs
+	. /etc/defaults/periodic.conf
+	source_periodic_confs
 fi
 
 case "$fp_test_master_port_make_enable" in
 	[Yy][Ee][Ss])
-        echo "cd $fp_scripts_dir && ./test-master-port.sh" | su -fm $fp_freshports_user || rc=3
+	logger -t FreshPorts into 120.fp_test_master_port_make
+	echo "cd $fp_scripts_dir && ./test-master-port.sh" | su -fm $fp_freshports_user || rc=3
 	;;
 
-	*)
-	rc=0
-	;;
+	*)  rc=0;;
 esac
 
 exit $rc

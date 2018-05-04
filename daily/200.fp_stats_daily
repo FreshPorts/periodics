@@ -9,17 +9,17 @@
 #
 if [ -r /etc/defaults/periodic.conf ]
 then
-    . /etc/defaults/periodic.conf
-    source_periodic_confs
+	. /etc/defaults/periodic.conf
+	source_periodic_confs
 fi
 
 case "$fp_stats_daily_enable" in
 	[Yy][Ee][Ss])
-	logger into fp_stats_daily
-        echo "cd $fp_scripts_dir && /usr/local/bin/perl daily_stats.pl" | su -fm $fp_freshports_user || rc=3
+	logger -t FreshPorts into 200.fp_stats_daily
+	echo "cd $fp_scripts_dir && /usr/local/bin/perl daily_stats.pl" | su -fm $fp_freshports_user || rc=3
 	;;
 
-    *)  rc=0;;
+	*)  rc=0;;
 esac
 
 exit $rc
