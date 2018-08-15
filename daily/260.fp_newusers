@@ -7,16 +7,21 @@
 
 # If there is a global system configuration file, suck it in.
 #
-logger -t FreshPorts "into 260.fp_newusers"
+logger -t FreshPorts "into $0"
 if [ -r /etc/defaults/periodic.conf ]
 then
     . /etc/defaults/periodic.conf
     source_periodic_confs
 fi
 
+# assign default values
+fp_scripts_dir=${fp_scripts_dir:-/usr/local/libexec/freshports}
+fp_freshports_user=${fp_freshports_user:-freshports}
+
 logger -t FreshPorts "into 260.fp_newusers"
 case "$fp_newusers_enable" in
 	[Yy][Ee][Ss])
+	echo ""
 	logger -t FreshPorts "into 260.fp_newusers"
         echo "cd $fp_scripts_dir && ./newusers.sh  2>&1 | mail -s 'FreshPorts users'     dan@langille.org" | su -fm $fp_freshports_user || rc=3
 	;;
