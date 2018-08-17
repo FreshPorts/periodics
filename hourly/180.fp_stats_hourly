@@ -8,7 +8,7 @@
 
 # If there is a global system configuration file, suck it in.
 #
-logger -t FreshPorts "into $0"
+logger -p local3.notice -t FreshPorts "into $0"
 if [ -r /etc/defaults/periodic.conf ]
 then
 	. /etc/defaults/periodic.conf
@@ -21,7 +21,7 @@ fp_freshports_user=${fp_freshports_user:-freshports}
 
 case "$fp_stats_hourly_enable" in
 	[Yy][Ee][Ss])
-	logger -t FreshPorts into 180.fp_stats_hourly
+	logger -p local3.notice -t FreshPorts into 180.fp_stats_hourly
 	echo "cd $fp_scripts_dir && /usr/local/bin/perl hourly_stats.pl > /dev/null" | su -fm $fp_freshports_user || rc=3
 	;;
 
