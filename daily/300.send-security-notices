@@ -1,0 +1,32 @@
+#!/bin/sh -
+#
+# FreshPorts periodic script
+#
+# Sends users a notice for watched ports which have had a security-related commit.
+#
+
+# If there is a global system configuration file, suck it in.
+#
+logger -t FreshPorts "into $0"
+if [ -r /etc/defaults/periodic.conf ]
+then
+	. /etc/defaults/periodic.conf
+	source_periodic_confs
+fi
+
+# assign default values
+fp_scripts_dir=${fp_scripts_dir:-/usr/local/libexec/freshports}
+fp_freshports_user=${fp_freshports_user:-freshports}
+
+DIRLOG=${fp_log_dir:=/var/log/freshports/}
+
+case "$fp_send_security_notices_enable" in
+	[Yy][Ee][Ss])
+	logger -t FreshPorts into $0
+	echo "cd $fp_scripts_dir && /usr/local/bin/perl report-security-notice.pl D 2>&1 > ${DIRLOG}/report-security.daily" | su -fm $fp_freshports_user || rc=3
+	;;
+
+	*)  rc=0;;
+esac
+
+exit $rc
