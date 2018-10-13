@@ -23,7 +23,7 @@ DIRLOG=${fp_log_dir:=/var/log/freshports/}
 case "$fp_send_report_new_ports_fortnightly_enable" in
 	[Yy][Ee][Ss])
 	logger -t FreshPorts into $0
-	echo "cd $fp_scripts_dir && /usr/local/bin/perl report-new-ports.pl F" | su -fm $fp_freshports_user 2>&1 > ${DIRLOG}/report-new-ports.fortnightly || rc=3
+	echo "cd $fp_scripts_dir && /usr/local/bin/perl report-new-ports.pl F" | su -fm $fp_freshports_user 2>&1 >> ${DIRLOG}/report-new-ports.fortnightly || rc=3
 	;;
 
 	*)  rc=0;;
