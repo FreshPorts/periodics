@@ -7,7 +7,6 @@
 
 # If there is a global system configuration file, suck it in.
 #
-logger -t FreshPorts "into $0"
 if [ -r /etc/defaults/periodic.conf ]
 then
 	. /etc/defaults/periodic.conf
@@ -22,7 +21,7 @@ DIRLOG=${fp_log_dir:=/var/log/freshports/}
 
 case "$fp_send_report_notices_daily_enable" in
 	[Yy][Ee][Ss])
-	logger -t FreshPorts into $0
+	logger -p local3.notice -t FreshPorts into $0
 	echo "cd $fp_scripts_dir && /usr/local/bin/perl report-notification.pl D" | su -fm $fp_freshports_user 2>&1 >> ${DIRLOG}/report-notification.daily || rc=3
 	;;
 

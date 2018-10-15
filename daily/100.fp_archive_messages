@@ -7,7 +7,6 @@
 
 # If there is a global system configuration file, suck it in.
 #
-logger -p local3.notice -t FreshPorts "into $0"
 if [ -r /etc/defaults/periodic.conf ]
 then
     . /etc/defaults/periodic.conf
@@ -20,9 +19,10 @@ fp_freshports_user=${fp_freshports_user:-freshports}
 
 case "$fp_archive_messages_enable" in
 	[Yy][Ee][Ss])
-        echo ""
-        echo "cd $fp_scripts_dir && ./archive-messages.sh 1" | su -fm $fp_freshports_user || rc=3
-        ;;
+	logger -p local3.notice -t FreshPorts "into $0"
+	echo ""
+	echo "cd $fp_scripts_dir && ./archive-messages.sh 1" | su -fm $fp_freshports_user || rc=3
+	;;
         
     *)  rc=0;;
 esac
