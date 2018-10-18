@@ -1,0 +1,30 @@
+#!/bin/sh -
+#
+# FreshPorts periodic script
+#
+# Updates the system status HTML file for backend related information
+#
+
+# If there is a global system configuration file, suck it in.
+#
+if [ -r /etc/defaults/periodic.conf ]
+then
+    . /etc/defaults/periodic.conf
+    source_periodic_confs
+fi
+
+# assign default values
+fp_scripts_dir=${fp_scripts_dir:-/usr/local/libexec/freshports}
+fp_freshports_user=${fp_freshports_user:-freshports}
+
+case "$fp_system_status_enable" in
+	[Yy][Ee][Ss])
+	logger -p local3.notice -t FreshPorts "into $0"
+	echo ""
+	echo "cd $fp_scripts_dir && ./system_status.sh" | su -fm $fp_freshports_user || rc=3
+	;;
+        
+    *)  rc=0;;
+esac
+
+exit $rc
