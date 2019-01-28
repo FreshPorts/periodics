@@ -22,7 +22,7 @@ DIRLOG=${fp_log_dir:=/var/log/freshports/}
 case "$fp_send_security_notices_enable" in
 	[Yy][Ee][Ss])
 	logger -p local3.notice -t FreshPorts into $0
-	echo "cd $fp_scripts_dir && /usr/local/bin/perl report-security-notice.pl D" | su -fm $fp_freshports_user 2>&1 >> ${DIRLOG}/report-security.daily || rc=3
+	echo "cd $fp_scripts_dir && /usr/local/bin/perl report-security-notice.pl D" | su -fm $fp_freshports_user 2>&1 >> ${DIRLOG}/report-security.daily.log || rc=3
 	;;
 
 	*)  rc=0;;
