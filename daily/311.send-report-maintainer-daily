@@ -1,0 +1,31 @@
+#!/bin/sh -
+#
+# FreshPorts periodic script
+#
+# Sends maintainers a notice for maintained ports which have had a commit.
+#
+
+# If there is a global system configuration file, suck it in.
+#
+if [ -r /etc/defaults/periodic.conf ]
+then
+	. /etc/defaults/periodic.conf
+	source_periodic_confs
+fi
+
+# assign default values
+fp_scripts_dir=${fp_scripts_dir:-/usr/local/libexec/freshports}
+fp_freshports_user=${fp_freshports_user:-freshports}
+
+DIRLOG=${fp_log_dir:=/var/log/freshports/}
+
+case "$fp_send_report_maintainer_daily_enable" in
+	[Yy][Ee][Ss])
+	logger -p local3.notice -t FreshPorts into $0
+	echo "cd $fp_scripts_dir && /usr/local/bin/perl report-maintainer-ports.pl D" | su -fm $fp_freshports_user 2>&1 >> ${DIRLOG}/report-maintainer.daily.log || rc=3
+	;;
+
+	*)  rc=0;;
+esac
+
+exit $rc
