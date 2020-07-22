@@ -16,7 +16,7 @@ fi
 # assign default values
 fp_scripts_dir=${fp_scripts_dir:-/usr/local/libexec/freshports}
 
-case "$fp_system_status_enable" in
+case "$fp_check_for_git_commits_enable" in
 	[Yy][Ee][Ss])
 	logger -p local3.notice -t FreshPorts "into $0"
 	echo ""
