@@ -1,0 +1,29 @@
+#!/bin/sh -
+#
+# FreshPorts periodic script
+#
+# Sets flags for any jobs which need doing hourly
+#
+
+# If there is a global system configuration file, suck it in.
+#
+if [ -r /etc/defaults/periodic.conf ]
+then
+    . /etc/defaults/periodic.conf
+    source_periodic_confs
+fi
+
+# assign default values
+fp_scripts_dir=${fp_scripts_dir:-/usr/local/libexec/freshports}
+
+case "$fp.set_hour_flags_enable" in
+	[Yy][Ee][Ss])
+	logger -p local3.notice -t FreshPorts "into $0"
+	echo ""
+	echo "cd $fp_scripts_dir && ./helper_scripts/set_hourly_flags.sh.sh" || rc=3
+	;;
+        
+    *)  rc=0;;
+esac
+
+exit $rc
