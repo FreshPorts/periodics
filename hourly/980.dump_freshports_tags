@@ -1,0 +1,32 @@
+#!/bin/sh -
+#
+# FreshPorts periodic script
+#
+# Take the FreshPorts tags, used for iterating through the commits,
+# and dump them to a file. The dataset within which this file exists
+# should be backed up on a regular basis and have regular ZFS snapshots.
+#
+
+# If there is a global system configuration file, suck it in.
+#
+if [ -r /etc/defaults/periodic.conf ]
+then
+	. /etc/defaults/periodic.conf
+	source_periodic_confs
+fi
+
+# assign default values
+fp_scripts_dir=${fp_scripts_dir:-/usr/local/libexec/freshports}
+fp_ingress_user=${fp_ingress_user:-ingress}
+fp_dump_freshports_tags_file=${fp_fp_dump_freshports_tags_file:-/var/db/ingress/latest_commits/latest_commits.txt}
+
+case "$fp_dump_freshports_tags_enable" in
+	[Yy][Ee][Ss])
+	logger -p local3.notice -t FreshPorts "into $0"
+	echo "cd $fp_scripts_dir && ./git-last-processed-tags.sh > $fp_dump_freshports_tags_file" | su -fm $fp_ingress_usery || rc=3
+	;;
+
+	*)  rc=0;;
+esac
+
+exit $rc
