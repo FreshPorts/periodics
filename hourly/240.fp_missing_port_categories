@@ -16,7 +16,7 @@ fi
 
 # assign default values
 fp_scripts_dir=${fp_scripts_dir:-%%FP_LIBEXEC%%}
-fp_freshports_user=${fp_freshports_user:-%%FP_FRESHPORTS_USER%%}
+fp_freshports_user=${fp_freshports_user:-%%FP_USER_FRESHPORTS%%}
 
 case "$fp_missing_port_categories_enable" in
 	[Yy][Ee][Ss])
