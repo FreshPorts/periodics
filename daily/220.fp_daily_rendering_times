@@ -14,8 +14,8 @@ then
 fi
 
 # assign default values
-fp_scripts_dir=${fp_scripts_dir:-/usr/local/libexec/freshports}
-fp_freshports_user=${fp_freshports_user:-freshports}
+fp_scripts_dir=${fp_scripts_dir:-%%FP_LIBEXEC%%}
+fp_freshports_user=${fp_freshports_user:-%%FP_FRESHPORTS_USER%%}
 
 case "$fp_daily_rendering_times_enable" in
 	[Yy][Ee][Ss])

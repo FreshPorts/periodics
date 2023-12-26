@@ -15,13 +15,13 @@ then
 fi
 
 # assign default values
-fp_scripts_dir=${fp_scripts_dir:-/usr/local/libexec/freshports}
-fp_freshports_user=${fp_freshports_user:-freshports}
+fp_scripts_dir=${fp_scripts_dir:-%%FP_LIBEXEC%%}
+fp_freshports_user=${fp_freshports_user:-%%FP_FRESHPORTS_USER%%}
 
 case "$fp_test_master_port_db_enable" in
 	[Yy][Ee][Ss])
 	logger -p local3.notice -t FreshPorts "into $0"
-	echo "cd $fp_scripts_dir && /usr/local/bin/perl test-master-port.pl" | su -fm $fp_freshports_user || rc=3
+	echo "cd $fp_scripts_dir && %%LOCALBASE%%/bin/perl test-master-port.pl" | su -fm $fp_freshports_user || rc=3
 	;;
 
 	*)  rc=0;;

@@ -16,8 +16,8 @@ then
 fi
 
 # assign default values
-fp_scripts_dir=${fp_scripts_dir:-/usr/local/libexec/freshports}
-fp_ingress_user=${fp_ingress_user:-ingress}
+fp_scripts_dir=${fp_scripts_dir:-%%FP_LIBEXEC%%}
+fp_ingress_user=${fp_ingress_user:-%%FP_USER_INGRESS%%}
 fp_dump_freshports_tags_file=${fp_fp_dump_freshports_tags_file:-/var/db/ingress/latest_commits/latest_commits.txt}
 
 case "$fp_dump_freshports_tags_enable" in
