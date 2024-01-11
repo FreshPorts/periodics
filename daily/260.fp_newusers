@@ -21,7 +21,7 @@ case "$fp_newusers_enable" in
 	[Yy][Ee][Ss])
 	logger -p local3.notice -t FreshPorts "into $0"
 	echo ""
-	echo "cd $fp_scripts_dir && ./newusers.sh" | su -fm $fp_freshports_user 2>&1 | mail -s 'FreshPorts users' dan@langille.org || rc=3
+	echo "cd $fp_scripts_dir && ./newusers.sh" | su -fm $fp_freshports_user 2>&1 || rc=3
 	;;
 
     *)  rc=0;;
