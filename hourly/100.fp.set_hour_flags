@@ -21,7 +21,7 @@ case "$fp_set_hour_flags_enable" in
 	[Yy][Ee][Ss])
 	logger -p local3.notice -t FreshPorts "into $0"
 	echo ""
-	echo "cd $fp_scripts_dir && ./helper_scripts/set_hourly_flags.sh" | su -fm $fp_freshports_user || rc=3
+	echo "cd $fp_scripts_dir && ./helper_scripts/set_hourly_flags.sh" | su -l $fp_freshports_user || rc=3
 	;;
         
     *)  rc=0;;

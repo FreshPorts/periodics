@@ -23,7 +23,7 @@ fp_dump_freshports_tags_file=${fp_fp_dump_freshports_tags_file:-/var/db/ingress/
 case "$fp_dump_freshports_tags_enable" in
 	[Yy][Ee][Ss])
 	logger -p local3.notice -t FreshPorts "into $0"
-	echo "cd $fp_scripts_dir && ./git-last-processed-tags.sh > $fp_dump_freshports_tags_file" | su -fm $fp_ingress_user || rc=3
+	echo "cd $fp_scripts_dir && ./git-last-processed-tags.sh > $fp_dump_freshports_tags_file" | su -l $fp_ingress_user || rc=3
 	;;
 
 	*)  rc=0;;

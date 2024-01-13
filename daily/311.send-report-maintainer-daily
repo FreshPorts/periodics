@@ -22,7 +22,7 @@ DIRLOG=${fp_log_dir:=%%FP_LOG_DIR%%}
 case "$fp_send_report_maintainer_daily_enable" in
 	[Yy][Ee][Ss])
 	logger -p local3.notice -t FreshPorts into $0
-	echo "cd $fp_scripts_dir && %%LOCALBASE%%/bin/perl report-maintainer-ports.pl D" | su -fm $fp_freshports_user 2>&1 >> ${DIRLOG}/report-maintainer.daily.log || rc=3
+	echo "cd $fp_scripts_dir && %%LOCALBASE%%/bin/perl report-maintainer-ports.pl D" | su -l $fp_freshports_user 2>&1 >> ${DIRLOG}/report-maintainer.daily.log || rc=3
 	;;
 
 	*)  rc=0;;
