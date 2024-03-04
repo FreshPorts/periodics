@@ -21,7 +21,7 @@ case "$fp_system_status_enable" in
 	[Yy][Ee][Ss])
 	logger -p local3.notice -t FreshPorts "into $0"
 	echo ""
-	echo "cd $fp_scripts_dir && ./system_status.sh" | su -l $fp_freshports_user || rc=3
+	echo "cd $fp_scripts_dir && /bin/sh ./system_status.sh" | su -l $fp_freshports_user || rc=3
 	;;
         
     *)  rc=0;;
