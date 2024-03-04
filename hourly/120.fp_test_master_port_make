@@ -21,7 +21,7 @@ fp_freshports_user=${fp_freshports_user:-%%FP_USER_FRESHPORTS%%}
 case "$fp_test_master_port_make_enable" in
 	[Yy][Ee][Ss])
 	logger -p local3.notice -t FreshPorts "into $0"
-	echo "cd $fp_scripts_dir && ./test-master-port.sh" | su -l $fp_freshports_user || rc=3
+	echo "cd $fp_scripts_dir && /bin/sh ./test-master-port.sh" | su -l $fp_freshports_user || rc=3
 	;;
 
 	*)  rc=0;;
