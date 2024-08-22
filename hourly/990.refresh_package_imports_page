@@ -1,0 +1,30 @@
+#!/bin/sh -
+#
+# FreshPorts periodic script
+#
+# Dump the packages_last_checked table to a static text file.
+#
+
+# If there is a global system configuration file, suck it in.
+#
+if [ -r /etc/defaults/periodic.conf ]
+then
+	. /etc/defaults/periodic.conf
+	source_periodic_confs
+fi
+
+# assign default values
+fp_scripts_dir=${fp_scripts_dir:-%%FP_LIBEXEC%%}
+fp_freshports_user=${fp_ingress_user:-%%FP_USER_FRESHPORTS%%}
+fp_refresh_package_imports_page_enable_file=${fp_refresh_package_imports_page_enable_file:-/var/db/freshports/cache/html/package-imports.txt}
+
+case "$fp_refresh_package_imports_page_enable_enable" in
+	[Yy][Ee][Ss])
+	logger -p local3.notice -t FreshPorts "into $0"
+	echo "cd $fp_scripts_dir && ./dump-package_imports.sh > $fp_refresh_package_imports_page_enable_file" | su -l $fp_freshports_user || rc=3
+	;;
+
+	*)  rc=0;;
+esac
+
+exit $rc
