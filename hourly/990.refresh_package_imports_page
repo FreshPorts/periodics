@@ -16,12 +16,14 @@ fi
 # assign default values
 fp_scripts_dir=${fp_scripts_dir:-%%FP_LIBEXEC%%}
 fp_freshports_user=${fp_ingress_user:-%%FP_USER_FRESHPORTS%%}
-fp_refresh_package_imports_page_enable_file=${fp_refresh_package_imports_page_enable_file:-/var/db/freshports/cache/html/package-imports.txt}
+fp_refresh_package_imports_page_file_date=${fp_refresh_package_imports_page_file_date:-/var/db/freshports/cache/html/package-imports-date.txt}
+fp_refresh_package_imports_page_file_name=${fp_refresh_package_imports_page_file_name:-/var/db/freshports/cache/html/package-imports-name.txt}
 
 case "$fp_refresh_package_imports_page_enable_enable" in
 	[Yy][Ee][Ss])
 	logger -p local3.notice -t FreshPorts "into $0"
-	echo "cd $fp_scripts_dir && ./dump-package_imports.sh > $fp_refresh_package_imports_page_enable_file" | su -l $fp_freshports_user || rc=3
+	echo "cd $fp_scripts_dir && ./dump-package_imports.sh date > $fp_refresh_package_imports_page_file_date" | su -l $fp_freshports_user || rc=3
+	echo "cd $fp_scripts_dir && ./dump-package_imports.sh name > $fp_refresh_package_imports_page_file_name" | su -l $fp_freshports_user || rc=3
 	;;
 
 	*)  rc=0;;
