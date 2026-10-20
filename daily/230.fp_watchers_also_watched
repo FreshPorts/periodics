@@ -21,7 +21,22 @@ fp_freshports_user=${fp_freshports_user:-%%FP_USER_FRESHPORTS%%}
 case "$fp_watchers_also_watched_enable" in
 	[Yy][Ee][Ss])
 	logger -p local3.notice -t FreshPorts "into $0"
+	rc=0
 	echo "cd $fp_scripts_dir && %%LOCALBASE%%/bin/perl watchers_also_watched_rebuild.pl" | su -l $fp_freshports_user || rc=3
+
+	#
+	# Tell watchgoose the rebuild finished.  On success only: a ping after a
+	# failed run would report the check as healthy when it is not.
+	#
+	# The URL carries a token, so it lives in /etc/periodic.conf.local as
+	# fp_watchers_also_watched_watchgoose_url.  Empty means do not ping.
+	# A failed ping is logged but does not fail the rebuild.
+	#
+	if [ $rc = 0 -a -n "$fp_watchers_also_watched_watchgoose_url" ]
+	then
+		/usr/bin/fetch --output /dev/null -q --retry --retry-delay=10 "$fp_watchers_also_watched_watchgoose_url" || \
+			logger -p local3.warning -t FreshPorts "$0: watchgoose ping failed"
+	fi
 	;;
 
 	*)  rc=0;;
