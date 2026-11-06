@@ -1,0 +1,31 @@
+#!/bin/sh -
+#
+# FreshPorts periodic script
+#
+# Adds to category_history, the physical and virtual categories
+# over time, graphed at /category-history.php
+#
+
+# If there is a global system configuration file, suck it in.
+#
+if [ -r /etc/defaults/periodic.conf ]
+then
+	. /etc/defaults/periodic.conf
+	source_periodic_confs
+fi
+
+# assign default values
+fp_scripts_dir=${fp_scripts_dir:-%%FP_LIBEXEC%%}
+fp_freshports_user=${fp_freshports_user:-%%FP_USER_FRESHPORTS%%}
+
+case "$fp_category_history_enable" in
+	[Yy][Ee][Ss])
+	logger -p local3.notice -t FreshPorts "into $0"
+	rc=0
+	echo "cd $fp_scripts_dir && %%LOCALBASE%%/bin/perl category_history_update.pl" | su -l $fp_freshports_user || rc=3
+	;;
+
+	*)  rc=0;;
+esac
+
+exit $rc
