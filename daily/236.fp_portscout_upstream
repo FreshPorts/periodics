@@ -1,0 +1,45 @@
+#!/bin/sh -
+#
+# FreshPorts periodic script
+#
+# Loads the newer upstream versions found by portscout into
+# port_upstream, shown on the port page (#626)
+#
+
+# If there is a global system configuration file, suck it in.
+#
+if [ -r /etc/defaults/periodic.conf ]
+then
+	. /etc/defaults/periodic.conf
+	source_periodic_confs
+fi
+
+# assign default values
+fp_scripts_dir=${fp_scripts_dir:-%%FP_LIBEXEC%%}
+fp_freshports_user=${fp_freshports_user:-%%FP_USER_FRESHPORTS%%}
+
+case "$fp_portscout_upstream_enable" in
+	[Yy][Ee][Ss])
+	logger -p local3.notice -t FreshPorts "into $0"
+	rc=0
+	echo "cd $fp_scripts_dir && ./portscout_upstream.sh" | su -l $fp_freshports_user || rc=3
+
+	#
+	# Tell watchgoose the load finished.  On success only: a ping after a
+	# failed run would report the check as healthy when it is not.
+	#
+	# The URL carries a token, so it lives in /etc/periodic.conf.local as
+	# fp_portscout_upstream_watchgoose_url.  Empty means do not ping.
+	# A failed ping is logged but does not fail the load.
+	#
+	if [ $rc = 0 -a -n "$fp_portscout_upstream_watchgoose_url" ]
+	then
+		/usr/bin/fetch --output /dev/null -q --retry --retry-delay=10 "$fp_portscout_upstream_watchgoose_url" || \
+			logger -p local3.warning -t FreshPorts "$0: watchgoose ping failed"
+	fi
+	;;
+
+	*)  rc=0;;
+esac
+
+exit $rc
