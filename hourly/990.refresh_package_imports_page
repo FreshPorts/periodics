@@ -15,15 +15,48 @@ fi
 
 # assign default values
 fp_scripts_dir=${fp_scripts_dir:-%%FP_LIBEXEC%%}
-fp_freshports_user=${fp_ingress_user:-%%FP_USER_FRESHPORTS%%}
+fp_freshports_user=${fp_freshports_user:-%%FP_USER_FRESHPORTS%%}
 fp_refresh_package_imports_page_file_date=${fp_refresh_package_imports_page_file_date:-/var/db/freshports/cache/html/package-imports-date.txt}
 fp_refresh_package_imports_page_file_name=${fp_refresh_package_imports_page_file_name:-/var/db/freshports/cache/html/package-imports-name.txt}
+
+# Write one of the files shown by /--/package-imports.php.
+#
+#   $1 - the sort order passed to dump-package_imports.sh: date or name
+#   $2 - the file the website reads
+#
+# The dump is written to a dotfile in the same directory as $2, so the mv
+# below is a rename within one filesystem and the website never sees a
+# partly written file. The dotfile replaces $2 only if the dump exited 0
+# and wrote something. Otherwise $2 keeps its previous contents, the
+# failure is logged, and this script exits 3.
+#
+# The empty-file test matters: dump-package_imports.sh writes nothing and
+# still exits 0 when OFFLINE is set in config.sh or when psql fails.
+# Without the test, either case would leave the website with an empty
+# list of package imports.
+refresh_package_imports_file()
+{
+	local sort_by="$1"
+	local dest="$2"
+	local tmp="$(dirname "$dest")/.$(basename "$dest").new"
+
+	rm -f "$tmp"
+	if echo "cd $fp_scripts_dir && ./dump-package_imports.sh $sort_by > $tmp" | su -l $fp_freshports_user && [ -s "$tmp" ]
+	then
+		mv -f "$tmp" "$dest"
+	else
+		logger -p local3.err -t FreshPorts "$0: dump-package_imports.sh $sort_by failed or wrote nothing; $dest left unchanged"
+		rm -f "$tmp"
+		rc=3
+	fi
+}
 
 case "$fp_refresh_package_imports_page_enable" in
 	[Yy][Ee][Ss])
 	logger -p local3.notice -t FreshPorts "into $0"
-	echo "cd $fp_scripts_dir && ./dump-package_imports.sh date > $fp_refresh_package_imports_page_file_date" | su -l $fp_freshports_user || rc=3
-	echo "cd $fp_scripts_dir && ./dump-package_imports.sh name > $fp_refresh_package_imports_page_file_name" | su -l $fp_freshports_user || rc=3
+	rc=0
+	refresh_package_imports_file date "$fp_refresh_package_imports_page_file_date"
+	refresh_package_imports_file name "$fp_refresh_package_imports_page_file_name"
 	;;
 
 	*)  rc=0;;
