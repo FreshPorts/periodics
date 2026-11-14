@@ -17,7 +17,17 @@ fi
 fp_scripts_dir=${fp_scripts_dir:-%%FP_LIBEXEC%%}
 fp_freshports_user=${fp_freshports_user:-%%FP_USER_FRESHPORTS%%}
 
-case "$fp_categories_rebuild_search" in
+# Enable with fp_categories_rebuild_search_enable="YES", the same _enable
+# form every other FreshPorts periodic script uses.
+#
+# This script used to read fp_categories_rebuild_search (no _enable), and
+# existing hosts set that name in /etc/periodic.conf.local. It is still
+# honoured when the new name is not set, so those hosts keep rebuilding
+# without a configuration change. Once every host sets the new name, the
+# fallback can be removed.
+fp_categories_rebuild_search_enable=${fp_categories_rebuild_search_enable:-${fp_categories_rebuild_search}}
+
+case "$fp_categories_rebuild_search_enable" in
 	[Yy][Ee][Ss])
 	logger -p local3.notice -t FreshPorts "into $0"
 	echo ""
