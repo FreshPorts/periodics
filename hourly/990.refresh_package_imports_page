@@ -30,10 +30,10 @@ fp_refresh_package_imports_page_file_name=${fp_refresh_package_imports_page_file
 # and wrote something. Otherwise $2 keeps its previous contents, the
 # failure is logged, and this script exits 3.
 #
-# The empty-file test matters: dump-package_imports.sh writes nothing and
-# still exits 0 when OFFLINE is set in config.sh or when psql fails.
-# Without the test, either case would leave the website with an empty
-# list of package imports.
+# dump-package_imports.sh exits non-zero when psql fails. The empty-file
+# test is still needed: when OFFLINE is set in config.sh, the dump writes
+# nothing and exits 0. Without the test, the website would then show an
+# empty list of package imports.
 refresh_package_imports_file()
 {
 	local sort_by="$1"
