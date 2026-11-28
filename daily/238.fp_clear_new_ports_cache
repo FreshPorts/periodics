@@ -1,0 +1,33 @@
+#!/bin/sh -
+#
+# FreshPorts periodic script
+#
+# A port page shows NEW for 10 days after the port is added, and the page
+# is cached.  Queue the ports whose NEW marker ran out for cache clearing,
+# so their pages stop saying NEW.
+# See https://github.com/FreshPorts/freshports/issues/464
+#
+
+# If there is a global system configuration file, suck it in.
+#
+if [ -r /etc/defaults/periodic.conf ]
+then
+	. /etc/defaults/periodic.conf
+	source_periodic_confs
+fi
+
+# assign default values
+fp_scripts_dir=${fp_scripts_dir:-"/usr/local/libexec/freshports"}
+fp_freshports_user=${fp_freshports_user:-"freshports"}
+
+case "$fp_clear_new_ports_cache_enable" in
+	[Yy][Ee][Ss])
+	logger -p local3.notice -t FreshPorts "into $0"
+	rc=0
+	echo "cd $fp_scripts_dir && /usr/local/bin/perl clear_new_ports_cache.pl" | su -l $fp_freshports_user || rc=3
+	;;
+
+	*)  rc=0;;
+esac
+
+exit $rc
